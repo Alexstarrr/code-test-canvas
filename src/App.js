@@ -13,11 +13,22 @@ const rgbColorLoop = () => {
   return rgbColor;
 }
 
+const calcDiff = (c1, c2) => {
+  const r = c1[0] - c2[0];
+  const g = c1[1] - c2[1];
+  const b = c1[2] - c2[2];
+  return Math.pow(r,5) + Math.pow(g,5) + Math.pow(b,1);
+}
+
+
 function App() {
   const canvasRef = useRef(null);
 
   useEffect(() => {
     const allColors = rgbColorLoop();
+    const sortedColors = allColors.sort((a, b) => calcDiff(a, b));
+    console.log(allColors);
+    console.log(sortedColors);
     const closedPosList = [];
     const openPosList = [];
     const canvas = canvasRef.current;
@@ -31,9 +42,14 @@ function App() {
           continue;
       }
     }
+
+
+
     
     const fillPosWithColor = () => {
-      const getPosAroundCenter = (x,y) => [[x-1,y],[x-1,y-1],[x,y-1],[x+1,y-1],[x+1,y],[x+1,y+1],[x,y+1],[x-1,y+1]];
+      // const getPosAroundCenter = (x,y) => [[x-1,y],[x,y-1],[x+1,y],[x,y+1]];
+      // const getPosAroundCenter = (x,y) => [[x-1,y],[x-1,y-1],[x,y-1],[x+1,y-1],[x+1,y],[x+1,y+1],[x,y+1],[x-1,y+1]];
+      const getPosAroundCenter = (x,y) => [[x-1,y],[x-2,y-1],[x-1,y-1],[x,y-1],[x+1,y-1],[x+2,y-1],[x+1,y],[x+2,y+1],[x+1,y+1],[x,y+1],[x-1,y+1],[x-2,y+1]];
       // starts the position array with center point
       openPosList.push([128,64]);
       while (closedPosList.length < allColors.length) {
